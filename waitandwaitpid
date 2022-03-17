@@ -1,0 +1,130 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <stdlib.h>
+#include <sys/wait.h>
+
+int main (int argc, char *argv[])
+{   
+    int pid2,pid3,pid4,pid5,pid6,pid7,pid8,pid9;
+    int status;
+    printf("1 ID is %d\n",(int)getpid());
+   
+    pid2=fork(); //2번 만들기
+    if(pid2<0){
+        fprintf(stderr, "Fork Failed");
+        exit(-1);
+    }
+    else if (pid2 == 0){
+        printf("2 ID is %d\n",(int)getpid());
+        pid3=fork(); //3번 만들기
+        if(pid3<0){
+            fprintf(stderr, "Fork Failed");
+            exit(-1);
+        }
+        else if (pid3 == 0){
+            printf("3 ID is %d\n",(int)getpid());
+         sleep(10);
+         printf("pid3 end \n");
+        }
+        else{
+         printf("3's the parent process 2 , with id %d\n", (int)getpid());
+            pid4=fork();//4번 만들기
+            if(pid4<0){
+                fprintf(stderr, "Fork Failed");
+                exit(-1);
+            }
+            else if (pid4 == 0){
+                printf("4 ID is %d\n",(int)getpid());
+            sleep(10);
+            printf("pid4 end \n");
+            }
+            else{
+                printf("4's the parent process 2 , with id %d\n", (int)getpid());
+            pid5 = fork();//5번 만들기
+            if(pid5<0){
+                   fprintf(stderr, "Fork Failed");
+                   exit(-1);
+                 }
+               else if (pid5 == 0){
+                  printf("5 ID is %d\n",(int)getpid());
+               sleep(10);
+               printf("pid5 end \n");
+            }
+            else{
+                   printf("5's the parent process 2 , with id %d\n", (int)getpid());
+                   sleep(10);
+               waitpid(pid4,&status,0);
+               printf("pid2 end \n");
+                   exit(0);
+               }
+         wait(NULL);
+         exit(0);
+             }
+       }   
+   }
+    else{
+      sleep(3);
+      printf("2's the parent process 1 , with id %d\n", (int)getpid());
+      pid6=fork(); //6번 만들기
+       if(pid6<0){
+           fprintf(stderr, "Fork Failed");
+           exit(-1);
+          }
+       else if (pid6 == 0){
+             printf("6 ID is %d\n",(int)getpid());
+           pid7=fork(); //7번 만들기
+             if(pid7<0){
+               fprintf(stderr, "Fork Failed");
+               exit(-1);
+           }
+           else if (pid7 == 0){
+               printf("7 ID is %d\n",(int)getpid());
+            sleep(10);
+            printf("pid7 end \n");
+           }
+           else{
+            printf("7's the parent process 6, with id %d\n", (int)getpid());
+               pid8=fork();//8번 만들기
+                  if(pid8<0){
+                   fprintf(stderr, "Fork Failed");
+                   exit(-1);
+               }
+               else if (pid8 == 0){
+                   printf("8 ID is %d\n",(int)getpid());
+               sleep(10);
+               printf("pid8 end \n");
+               }
+               else{
+                   printf("8's the parent process 6, with id %d\n", (int)getpid());
+               pid9 = fork();//5번 만들기
+               if(pid9<0){
+                      fprintf(stderr, "Fork Failed");
+                         exit(-1);
+                   }
+                  else if (pid9 == 0){
+                        printf("9 ID is %d\n",(int)getpid());
+                  sleep(10);
+                  printf("pid9 end \n");
+               }
+               else{
+                      printf("9'sthe parent process 6, with id %d\n", (int)getpid());
+                  sleep(10);
+                      waitpid(pid9,&status,0);
+                        printf("pid6 end \n");
+                       exit(0);
+                  }
+            }
+         }
+      }
+      else{
+            printf("6'sthe parent process 1, with id %d\n", (int)getpid());
+         sleep(10);
+            waitpid(pid6,&status,0);
+         printf("pid1 end \n");
+            exit(0);
+        }   
+      wait(NULL);
+      exit(0);
+   }
+}
